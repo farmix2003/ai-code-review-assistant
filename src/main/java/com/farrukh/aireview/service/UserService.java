@@ -1,6 +1,7 @@
 package com.farrukh.aireview.service;
 
 import com.farrukh.aireview.entity.User;
+import com.farrukh.aireview.exception.AuthException;
 
 /**
  * Service interface for managing user operations.
@@ -20,6 +21,8 @@ public interface UserService {
      * @return the registered user with generated ID
      */
     User register(User user);
+
+    User login(String email, String password) throws AuthException;
 
     /**
      * Finds a user by their email address.
