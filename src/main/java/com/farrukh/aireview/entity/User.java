@@ -3,14 +3,12 @@ package com.farrukh.aireview.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * Entity representing a user in the AI Code Review Assistant system.
  * This entity manages user account information, authentication credentials, roles, and relationships
  * to code review submissions.
- *
  * Features:
  * - Stores user authentication details (email, password)
  * - Manages user role and account status
@@ -25,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,31 +46,9 @@ public class User {
     @Column(nullable = false)
     private Boolean enabled;
 
-    // Timestamp when the user account was created (immutable after creation)
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    // Timestamp when the user account was last modified
-    private LocalDateTime updatedAt;
-
     // Collection of code reviews submitted by this user
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<CodeReview> codeReviews;
-
-    // JPA callback executed before persisting a new user entity
-    // Initializes createdAt timestamp and enables the account
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        this.enabled = true;
-    }
-
-    // JPA callback executed before updating an existing user entity
-    // Updates the updatedAt timestamp to track modifications
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }
